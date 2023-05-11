@@ -1,39 +1,36 @@
-## Filebeat configuration
-## https://github.com/elastic/beats/blob/main/deploy/docker/filebeat.docker.yml
-#
-
+# ============================== Filebeat inputs ==============================
 name: filebeat
 
-filebeat.config:
-  modules:
-    path: ${path.config}/modules.d/*.yml
-    reload.enabled: false
+# # Assume that monitored service will be deployed with Docker.
+# # This is for future uses.
+# filebeat.autodiscover:
+#   providers:
+#     - type: docker
+#       templates:
+#         - condition:
+#             contains:
+#               docker.container.image: foo
+#           config:
+#             - type: container
+#               paths:
+#                 - /var/lib/docker/containers/${data.docker.container.id}/*.log
+#               exclude_lines: ["^\\s+[\\-`('.|_]"]  # drop asciiart lines
 
-filebeat.autodiscover:
-  providers:
-    # The Docker autodiscover provider automatically retrieves logs from Docker
-    # containers as they start and stop.
-    - type: docker
-      hints.enabled: true
-
-processors:
-  - add_cloud_metadata: ~
-
-monitoring:
+# Crawl logs inside filebeat container.
+filebeat.inputs:
+- type: filestream
   enabled: true
-  elasticsearch:
-    username: beats_system
-    password: ${BEATS_SYSTEM_PASSWORD}
+  paths:
+    # REQUIRED: Change the path to your logs:
+    - /var/log/*.log
 
-output.elasticsearch:
-  hosts: [ http://elasticsearch:9200 ]
-  username: filebeat_internal
-  password: ${FILEBEAT_INTERNAL_PASSWORD}
+# ============================== Filebeat modules ==============================
+filebeat.config.modules:
+  path: ${path.config}/modules.d/*.yml
+  reload.enabled: false
 
-## HTTP endpoint for health checking
-## https://www.elastic.co/guide/en/beats/filebeat/current/http-endpoint.html
-#
-
-http:
-  enabled: true
-  host: 0.0.0.0
+# ================================== Outputs ===================================
+# ------------------------------ Logstash Output -------------------------------
+output.logstash:
+  hosts: ["logstash:5044"]
+  loadbalance: true
