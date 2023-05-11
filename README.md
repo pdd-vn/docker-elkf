@@ -4,7 +4,7 @@ This is a fork from [docker-elk](https://github.com/deviantony/docker-elk) that 
 All adjustments are intended for an MVP of ELK with `Filebeat`. For advanced configuration, please refer to the [original repo](https://github.com/deviantony/docker-elk) and [offical documents](https://www.elastic.co/guide/index.html)
 
 **TODO**
-- [] Deploy `Filebeat` and ELK stack to different server to reflect production use cases. 
+- [ ] Deploy `Filebeat` and ELK stack to different server to reflect production use cases. 
 
 ### Usage
 - Set up docker volume and user credentials:
