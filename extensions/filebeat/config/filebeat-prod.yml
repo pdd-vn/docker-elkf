@@ -1,28 +1,28 @@
 # ============================== Filebeat inputs ==============================
 name: filebeat
 
-# # Assume that monitored service will be deployed with Docker.
-# # This is for future uses.
-# filebeat.autodiscover:
-#   providers:
-#     - type: docker
-#       templates:
-#         - condition:
-#             contains:
-#               docker.container.image: foo
-#           config:
-#             - type: container
-#               paths:
-#                 - /var/lib/docker/containers/${data.docker.container.id}/*.log
-#               exclude_lines: ["^\\s+[\\-`('.|_]"]  # drop asciiart lines
+# Assume that monitored service will be deployed with Docker.
+# This is for future uses.
+filebeat.autodiscover:
+  providers:
+    - type: docker
+      templates:
+        - condition:
+            contains:
+              docker.container.image: foo
+          config:
+            - type: container
+              paths:
+                - /var/lib/docker/containers/${data.docker.container.id}/*.log
+              exclude_lines: ["^\\s+[\\-`('.|_]"]  # drop asciiart lines
 
-# Crawl logs inside filebeat container.
-filebeat.inputs:
-- type: filestream
-  enabled: true
-  paths:
-    # REQUIRED: Change the path to your logs:
-    - /var/log/*.log
+# # Crawl logs inside filebeat container.
+# filebeat.inputs:
+# - type: filestream
+#   enabled: true
+#   paths:
+#     # REQUIRED: Change the path to your logs:
+#     - /var/log/*.log
 
 # ============================== Filebeat modules ==============================
 filebeat.config.modules:
@@ -32,5 +32,5 @@ filebeat.config.modules:
 # ================================== Outputs ===================================
 # ------------------------------ Logstash Output -------------------------------
 output.logstash:
-  hosts: ["10.20.1.3:5044"]
+  hosts: ["foo:5044"]
   loadbalance: true
