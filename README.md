@@ -11,13 +11,13 @@ All adjustments are intended for an MVP of ELK with `Filebeat`. For advanced con
   ```
   docker-compose up setup
   ```
-- Run ELK stack with `Filebeat`:
+- Run ELK stack with `Filebeat` **LOCALLY**:
   ```
-  docker-compose -f docker-compose.yml -f extensions/filebeat/filebeat-compose-[local|prod].yml up -d
+  docker-compose -f docker-compose.yml -f extensions/filebeat/filebeat-compose-local.yml up -d
   ```
 ### Extras
-- To check logs of a service, use:
+- To check logs of a service **LOCALLY**, use:
   ```
-    docker-compose -f docker-compose.yml -f extensions/filebeat/filebeat-compose-[local|prod].yml logs [SERVICE NAME]
+    docker-compose -f docker-compose.yml -f extensions/filebeat/filebeat-compose-local.yml logs [SERVICE NAME]
   ```
 - In production, assume that monitored services are deployed with docker, `filebeat.autodiscover` should be used to gather logs (from mounted volume).
